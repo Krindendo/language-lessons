@@ -1,19 +1,9 @@
-import {
-  Image,
-  StyleSheet,
-  Platform,
-  View,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { presentSimpleSentences } from "@/constants/english";
-import { useState } from "react";
 import HideCorrectWord from "@/components/HideCorrectWord";
 
 export default function HomeScreen() {
