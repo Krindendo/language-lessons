@@ -3,6 +3,23 @@ import { View, Text, StyleSheet } from "react-native";
 
 import { WORD_HEIGHT } from "../hooks/useWordManipulate";
 
+interface WordProps {
+  id: number;
+  word: string;
+}
+
+export function Word({ word }: WordProps) {
+  return (
+    <View style={styles.root}>
+      <View>
+        <View style={styles.container}>
+          <Text style={styles.text}>{word}</Text>
+        </View>
+        <View style={styles.shadow} />
+      </View>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   root: {
     padding: 4,
@@ -26,21 +43,3 @@ const styles = StyleSheet.create({
     top: 4,
   },
 });
-
-interface WordProps {
-  id: number;
-  word: string;
-}
-
-const Word = ({ word }: WordProps) => (
-  <View style={styles.root}>
-    <View>
-      <View style={styles.container}>
-        <Text style={styles.text}>{word}</Text>
-      </View>
-      <View style={styles.shadow} />
-    </View>
-  </View>
-);
-
-export default Word;

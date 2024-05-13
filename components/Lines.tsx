@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import { WORD_HEIGHT, NUMBER_OF_LINES } from "../hooks/useWordManipulate";
 
-const Lines = () => {
+export function Lines() {
   return (
     <View style={StyleSheet.absoluteFill}>
       {new Array(NUMBER_OF_LINES).fill(0).map((_, index) => (
@@ -19,6 +19,4 @@ const Lines = () => {
       ))}
     </View>
   );
-};
-
-export default Lines;
+}

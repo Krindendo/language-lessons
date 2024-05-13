@@ -24,7 +24,7 @@ import {
   MARGIN_LEFT,
   MARGIN_TOP,
 } from "../hooks/useWordManipulate";
-import Placeholder from "./Placeholder";
+import { Placeholder } from "./Placeholder";
 
 interface SortableWordProps {
   offsets: Offset[];
@@ -33,12 +33,12 @@ interface SortableWordProps {
   containerWidth: number;
 }
 
-const SortableWord = ({
+export function SortableWord({
   offsets,
   index,
   children,
   containerWidth,
-}: SortableWordProps) => {
+}: SortableWordProps) {
   const offset = offsets[index]!;
   const isGestureActive = useSharedValue(false);
   const isAnimating = useSharedValue(false);
@@ -139,6 +139,6 @@ const SortableWord = ({
       </Animated.View>
     </>
   );
-};
+}
 
 export default SortableWord;

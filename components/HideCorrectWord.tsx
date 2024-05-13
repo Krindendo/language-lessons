@@ -3,15 +3,20 @@ import React, { useEffect, useState } from "react";
 
 interface HideCorrectWordProps {
   correctWord: string;
+  onSuccess: () => void;
 }
 
-export default function HideCorrectWord({ correctWord }: HideCorrectWordProps) {
+export function HideCorrectWord({
+  correctWord,
+  onSuccess,
+}: HideCorrectWordProps) {
   const [isHidden, setIsHidden] = useState(true);
   const [text, onChangeText] = React.useState("");
 
   useEffect(() => {
     if (text.toLowerCase() === correctWord.toLowerCase()) {
       setIsHidden(false);
+      onSuccess();
     }
   }, [text]);
 

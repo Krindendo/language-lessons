@@ -7,7 +7,7 @@ const presentSimpleSentences: Sentence[] = [
     text: "I always have breakfast at 9.",
     exclude: [2],
     possibleAnswers: ["have", "has", "doing"],
-    infinitiveOfTheVerb: "have",
+    infinitiveOfTheVerb: "to have",
   },
   {
     id: 1,
@@ -31,7 +31,7 @@ const presentSimpleSentences: Sentence[] = [
     text: "She has two daughters.",
     exclude: [1],
     possibleAnswers: ["speaks", "went", "have"],
-    infinitiveOfTheVerb: "have",
+    infinitiveOfTheVerb: "to have",
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ const presentSimpleSentences: Sentence[] = [
     text: "You usually have lunch at 4.",
     exclude: [3],
     possibleAnswers: ["speaks", "went", "have"],
-    infinitiveOfTheVerb: "have",
+    infinitiveOfTheVerb: "to have",
   },
   {
     id: 6,
@@ -63,7 +63,7 @@ const presentSimpleSentences: Sentence[] = [
     text: "Do you have breakfast at 9?",
     exclude: [0, 2],
     possibleAnswers: ["speaks", "went", "have"],
-    infinitiveOfTheVerb: "have",
+    infinitiveOfTheVerb: "to have",
   },
   {
     id: 8,
@@ -71,7 +71,7 @@ const presentSimpleSentences: Sentence[] = [
     text: "When do you have breakfast?",
     exclude: [1, 3],
     possibleAnswers: ["speaks", "went", "have"],
-    infinitiveOfTheVerb: "have",
+    infinitiveOfTheVerb: "to have",
   },
   {
     id: 9,
@@ -248,7 +248,15 @@ const presentContinuousSentences: Sentence[] = [
 const pastSimpleSentences: Sentence[] = [];
 const presentPerfectSentences: Sentence[] = [];
 
+const allSentences = [
+  ...presentSimpleSentences,
+  ...pastSimpleSentences,
+  ...presentContinuousSentences,
+  ...presentPerfectSentences,
+];
+
 export {
+  allSentences,
   presentSimpleSentences,
   presentContinuousSentences,
   pastSimpleSentences,

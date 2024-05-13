@@ -12,7 +12,7 @@ interface PlaceholderProps {
   offset: Offset;
 }
 
-const Placeholder = ({ offset }: PlaceholderProps) => {
+export function Placeholder({ offset }: PlaceholderProps) {
   return (
     <View
       style={{
@@ -26,6 +26,4 @@ const Placeholder = ({ offset }: PlaceholderProps) => {
       }}
     />
   );
-};
-
-export default Placeholder;
+}

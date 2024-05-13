@@ -3,30 +3,17 @@ import React, { ReactElement, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { useSharedValue, runOnUI, runOnJS } from "react-native-reanimated";
 
-import SortableWord from "./SortableWord";
-import Lines from "./Lines";
+import { SortableWord } from "./SortableWord";
+import { Lines } from "./Lines";
 import { MARGIN_LEFT } from "../hooks/useWordManipulate";
 
 const containerWidth = Dimensions.get("window").width - MARGIN_LEFT * 2;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: MARGIN_LEFT,
-  },
-  row: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    opacity: 0,
-  },
-});
 
 interface WordListProps {
   children: ReactElement<{ id: number }>[];
 }
 
-const WordList = ({ children }: WordListProps) => {
+export function WordList({ children }: WordListProps) {
   const [ready, setReady] = useState(false);
   const offsets = children.map(() => ({
     order: useSharedValue(0),
@@ -87,6 +74,17 @@ const WordList = ({ children }: WordListProps) => {
       ))}
     </View>
   );
-};
-
-export default WordList;
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    margin: MARGIN_LEFT,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    opacity: 0,
+  },
+});
