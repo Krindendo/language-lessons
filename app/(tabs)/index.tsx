@@ -5,26 +5,76 @@ import { ThemedView } from "@/components/ThemedView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { allSentences } from "@/constants/english";
 import { HideCorrectWord } from "@/components/HideCorrectWord";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRandomInt } from "@/lib/utils";
+import { Sentence } from "@/types/Sentence";
+import React from "react";
+
+const setSentence = () => ({
+  type: "SET_SENTENCE" as const,
+});
+
+const removeSentence = (id: number) => ({
+  type: "REMOVE_SENTENCE" as const,
+  payload: { id },
+});
+
+type Action =
+  | ReturnType<typeof setSentence>
+  | ReturnType<typeof removeSentence>;
+type State = {
+  sentences: Sentence[];
+  currentSentence: Sentence;
+};
+
+const initialState: State = {
+  sentences: allSentences,
+  currentSentence: allSentences[0],
+};
+
+function reducer(state: State, action: Action) {
+  switch (action.type) {
+    case "SET_SENTENCE": {
+      const randomNumber = getRandomInt(state.sentences.length);
+      return {
+        ...state,
+        currentSentence: state.sentences[randomNumber],
+      };
+    }
+    case "REMOVE_SENTENCE": {
+      return {
+        ...state,
+        sentences: state.sentences.filter((t) => t.id !== action.payload.id),
+      };
+    }
+    default: {
+      throw Error("Unknown action: " + action["type"]);
+    }
+  }
+}
 
 export default function HomeScreen() {
-  const [previousSentences, setPreviousSentences] = useState<number[]>([]);
-  const [randomSentence, setRandomSentence] = useState(0);
-  const mergedSentences = useMemo(() => allSentences, [allSentences]);
+  const [state, dispatch] = React.useReducer<React.Reducer<State, Action>>(
+    reducer,
+    initialState
+  );
+  const [remaining, setRemaining] = useState(
+    state.currentSentence.exclude.length
+  );
 
-  const maxNumberOfSentences = mergedSentences.length;
-  const currentSentence = mergedSentences[randomSentence];
-  const [remaining, setRemaining] = useState(currentSentence.exclude.length);
-
-  function onSuccess() {
+  const onSuccess = () => {
     setRemaining((prev) => prev - 1);
     console.log("remaining", remaining);
-  }
+  };
 
   useEffect(() => {
-    setPreviousSentences([...previousSentences, randomSentence]);
-    setRandomSentence(getRandomInt(maxNumberOfSentences));
+    if (remaining === 0) {
+      dispatch({
+        type: "REMOVE_SENTENCE",
+        payload: { id: state.currentSentence.id },
+      });
+      dispatch({ type: "SET_SENTENCE" });
+    }
   }, [remaining]);
 
   return (
@@ -32,16 +82,17 @@ export default function HomeScreen() {
       <View style={styles.titleContainer}>
         <ThemedText>Fill right word</ThemedText>
       </View>
+      <ThemedText>Tence: {state.currentSentence.tence}</ThemedText>
       <ThemedText>
-        Infinitive of the verb: {currentSentence.infinitiveOfTheVerb}
+        Infinitive of the verb: {state.currentSentence.infinitiveOfTheVerb}
       </ThemedText>
       <ThemedView>
         <View style={styles.sentence}>
-          {currentSentence.text.split(" ").map((word, index) => {
-            if (currentSentence.exclude.includes(index)) {
+          {state.currentSentence.text.split(" ").map((word, index) => {
+            if (state.currentSentence.exclude.includes(index)) {
               return (
                 <HideCorrectWord
-                  key={index + currentSentence.text}
+                  key={index + state.currentSentence.text}
                   correctWord={word}
                   onSuccess={onSuccess}
                 />
