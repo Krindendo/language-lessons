@@ -73,36 +73,40 @@ export default function HomeScreen() {
         type: "REMOVE_SENTENCE",
         payload: { id: state.currentSentence.id },
       });
-      dispatch({ type: "SET_SENTENCE" });
+      setTimeout(() => {
+        dispatch({ type: "SET_SENTENCE" });
+      }, 1000);
     }
   }, [remaining]);
 
   return (
     <SafeAreaView>
-      <View style={styles.titleContainer}>
-        <ThemedText>Fill right word</ThemedText>
-      </View>
-      <ThemedText>Tence: {state.currentSentence.tence}</ThemedText>
-      <ThemedText>
-        Infinitive of the verb: {state.currentSentence.infinitiveOfTheVerb}
-      </ThemedText>
-      <ThemedView>
-        <View style={styles.sentence}>
-          {state.currentSentence.text.split(" ").map((word, index) => {
-            if (state.currentSentence.exclude.includes(index)) {
-              return (
-                <HideCorrectWord
-                  key={index + state.currentSentence.text}
-                  correctWord={word}
-                  onSuccess={onSuccess}
-                />
-              );
-            } else {
-              return <ThemedText key={index}>{word}</ThemedText>;
-            }
-          })}
+      <View>
+        <View style={styles.titleContainer}>
+          <ThemedText type="title">Fill right word</ThemedText>
         </View>
-      </ThemedView>
+        <ThemedText>Tence: {state.currentSentence.tence}</ThemedText>
+        <ThemedText>
+          Infinitive of the verb: {state.currentSentence.infinitiveOfTheVerb}
+        </ThemedText>
+        <ThemedView>
+          <View style={styles.sentence}>
+            {state.currentSentence.text.split(" ").map((word, index) => {
+              if (state.currentSentence.exclude.includes(index)) {
+                return (
+                  <HideCorrectWord
+                    key={index + state.currentSentence.text}
+                    correctWord={word}
+                    onSuccess={onSuccess}
+                  />
+                );
+              } else {
+                return <ThemedText key={index}>{word}</ThemedText>;
+              }
+            })}
+          </View>
+        </ThemedView>
+      </View>
     </SafeAreaView>
   );
 }
