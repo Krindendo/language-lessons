@@ -87,7 +87,8 @@ export default function HomeScreen() {
         </View>
         <ThemedText>Tence: {state.currentSentence.tence}</ThemedText>
         <ThemedText>
-          Infinitive of the verb: {state.currentSentence.infinitiveOfTheVerb}
+          Infinitive of the verb:{" "}
+          {state.currentSentence.infinitiveOfTheVerb.join(";")}
         </ThemedText>
         <ThemedView>
           <View style={styles.sentence}>

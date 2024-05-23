@@ -4,6 +4,6 @@ export interface Sentence {
   text: string;
   exclude: number[];
   possibleAnswers: string[];
-  infinitiveOfTheVerb: string;
+  infinitiveOfTheVerb: string[];
   tence: "Present Simple" | "Present Continuous" | "Past Simple";
 }
