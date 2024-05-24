@@ -385,8 +385,7 @@ const allSentences: Sentence[] = [
   },
   {
     id: 16,
-    text: `Jim: Do you want to come over for dinner tonight?
-    Denise: Oh, I'm sorry, I can't. I am going to a movie tonight with some friends.`,
+    text: `Jim: Do you want to come over for dinner tonight? Denise: Oh, I'm sorry, I can't. I am going to a movie tonight with some friends.`,
     exclude: [17, 18],
     infinitiveOfTheVerb: ["go"],
     possibleAnswers: ["working", "works"],

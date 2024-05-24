@@ -1,7 +1,6 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { allSentences } from "@/constants/english";
 import { HideCorrectWord } from "@/components/HideCorrectWord";
@@ -9,6 +8,10 @@ import { useEffect, useState } from "react";
 import { getRandomInt } from "@/lib/utils";
 import { Sentence } from "@/types/Sentence";
 import React from "react";
+
+const setSentences = () => ({
+  type: "SET_SENTENCES" as const,
+});
 
 const setSentence = () => ({
   type: "SET_SENTENCE" as const,
@@ -20,6 +23,7 @@ const removeSentence = (id: number) => ({
 });
 
 type Action =
+  | ReturnType<typeof setSentences>
   | ReturnType<typeof setSentence>
   | ReturnType<typeof removeSentence>;
 type State = {
@@ -29,11 +33,18 @@ type State = {
 
 const initialState: State = {
   sentences: allSentences,
-  currentSentence: allSentences[0],
+  currentSentence: allSentences[getRandomInt(allSentences.length)],
 };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
+    case "SET_SENTENCES": {
+      const randomNumber = getRandomInt(state.sentences.length);
+      return {
+        sentences: allSentences,
+        currentSentence: state.sentences[randomNumber],
+      };
+    }
     case "SET_SENTENCE": {
       const randomNumber = getRandomInt(state.sentences.length);
       return {
@@ -64,7 +75,6 @@ export default function HomeScreen() {
 
   const onSuccess = () => {
     setRemaining((prev) => prev - 1);
-    console.log("remaining", remaining);
   };
 
   useEffect(() => {
@@ -79,49 +89,77 @@ export default function HomeScreen() {
     }
   }, [remaining]);
 
+  useEffect(() => {
+    setRemaining(state.currentSentence.exclude.length);
+  }, [state.currentSentence]);
+
+  const restartSentences = () => {
+    dispatch({ type: "SET_SENTENCES" });
+  };
+
   return (
     <SafeAreaView>
-      <View>
+      <View style={styles.container}>
         <View style={styles.titleContainer}>
           <ThemedText type="title">Fill right word</ThemedText>
         </View>
-        <ThemedText>Tence: {state.currentSentence.tence}</ThemedText>
-        <ThemedText>
-          Infinitive of the verb:{" "}
-          {state.currentSentence.infinitiveOfTheVerb.join(";")}
+        <ThemedText type="defaultSemiBold">
+          Tence: {state.currentSentence.tence}
         </ThemedText>
-        <ThemedView>
-          <View style={styles.sentence}>
-            {state.currentSentence.text.split(" ").map((word, index) => {
-              if (state.currentSentence.exclude.includes(index)) {
-                return (
-                  <HideCorrectWord
-                    key={index + state.currentSentence.text}
-                    correctWord={word}
-                    onSuccess={onSuccess}
-                  />
-                );
-              } else {
-                return <ThemedText key={index}>{word}</ThemedText>;
-              }
-            })}
-          </View>
-        </ThemedView>
+        <View style={styles.textWrapper}>
+          <ThemedText>
+            Infinitive of the verb
+            {state.currentSentence.infinitiveOfTheVerb.length > 1 ? "s" : ""}:
+          </ThemedText>
+          <ThemedText style={{ fontSize: 18, fontWeight: 600 }}>
+            {state.currentSentence.infinitiveOfTheVerb.join("; ")}
+          </ThemedText>
+        </View>
+
+        <View style={styles.sentence}>
+          {state.currentSentence.text.split(" ").map((word, index) => {
+            if (state.currentSentence.exclude.includes(index)) {
+              return (
+                <HideCorrectWord
+                  key={index + state.currentSentence.text}
+                  correctWord={word}
+                  onSuccess={onSuccess}
+                />
+              );
+            } else {
+              return <ThemedText key={index}>{word}</ThemedText>;
+            }
+          })}
+        </View>
+        <View style={styles.restartButtonWrapper}>
+          <Pressable onPress={restartSentences} role="button" />
+          <Button styles={styles.restartButton}>
+            <ThemedText style={styles.restartButtonText}>Restart</ThemedText>
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 24,
+    paddingHorizontal: 12,
+    display: "flex",
+    gap: 12,
+  },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
+  textWrapper: { display: "flex", flexDirection: "row", gap: 6 },
   sentence: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    flexWrap: "wrap",
     marginTop: 4,
     gap: 2,
   },
@@ -130,5 +168,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 2,
+  },
+  restartButtonWrapper: {},
+  restartButton: {
+    //group flex items-center justify-center rounded-md h-12 px-5 py-3 bg-primary
+  },
+  restartButtonText: {
+    //text-base font-medium text-foreground text-primary-foreground
   },
 });

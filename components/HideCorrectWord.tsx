@@ -1,8 +1,8 @@
-import { StyleSheet, TextInput } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { ThemedText } from "@/components/ThemedText";
-import { Input } from "./Input";
+import { Input } from "./ui/Input";
 
 interface HideCorrectWordProps {
   correctWord: string;
@@ -15,11 +15,13 @@ export function HideCorrectWord({
 }: HideCorrectWordProps) {
   const [isHidden, setIsHidden] = useState(true);
   const [word, setWord] = useState("");
-
-  console.log("correctWord", correctWord);
+  const cleanCorrectWord = useMemo(
+    () => correctWord.replaceAll(".", "").replaceAll(",", ""),
+    [correctWord]
+  );
 
   useEffect(() => {
-    if (word.toLowerCase() === correctWord.toLowerCase()) {
+    if (word.toLowerCase() === cleanCorrectWord.toLowerCase()) {
       setIsHidden(false);
       onSuccess();
     }
